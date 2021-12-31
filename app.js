@@ -1,14 +1,17 @@
-const http = require("http");
+const express = require("express");
+const { createServer } = require("http");
+const server = express();
 
-const server = http.createServer((req,res) => {
-    if(req.url === "/"){
-        res.write("<h1> Hello node.js</h1>");
-        res.end();
-    } else {
-        res.write("<h1>Invalid url</h1>");    
-    }
-});
+server.get("/", (req,res)=>{
+    // use __dirname when you need subdirectory path 
+    res.sendFile(__dirname + "/index.html");
+})
 
-server.listen(3000,()=>{
-     console.log("The server is listening on port 3000");
-});
+server.get("/about", (req,res)=> {
+    res.sendFile(__dirname + "/about.html");
+})
+
+server.listen(3000, (err)=>{
+    if (err) return console.log(err);
+    console.log("The server is listening on 3000 port");
+})

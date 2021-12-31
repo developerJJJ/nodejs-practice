@@ -1,22 +1,23 @@
 const express = require("express");
-const { createServer } = require("http");
+const hbs = require("express-handlebars");
 const server = express();
+
+server.set('view engine', 'hbs');
+server.engine('hbs', hbs.engine({
+  extname: 'hbs',
+  defaultLayout: 'layout.hbs',
+  layoutsDir: __dirname + '/views/layouts/',
+  partialsDir: __dirname + '/views/partials'
+}))
 
 // middleware
 // change default file load path
-server.use(express.static(__dirname + "/view"));
+server.use(express.static(__dirname + "/views"));
 
-server.get("/", (req,res)=>{
-    // use __dirname when you need subdirectory path 
-    res.sendFile("index.html");
-})
-
-server.get("/about", (req,res)=> {
-    res.sendFile(__dirname + "/about.html");
-})
-
-server.use((req, res) =>{
-    res.sendFile(__dirname + "/view/404.html");
+server.get('/', (req, res) => {
+    res.render("home", {
+        message: "Hello Node.js!"
+    });
 })
 
 server.listen(3000, (err)=>{
